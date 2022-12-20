@@ -9,7 +9,7 @@ const Container = styled(Box)`
   padding: 20px;
 `;
 
-const ReposList = ({ sort, setSort }) => {
+const ReposList = ({ sort, setSort, searchInput }) => {
   console.log(sort);
   const [repos, setRepos] = useState([]);
   const [...sortByStars] = repos;
@@ -18,18 +18,16 @@ const ReposList = ({ sort, setSort }) => {
   const [...sortByCreatedDate] = repos;
   const [...sortByUpdatedDate] = repos;
 
-  
-  sortByName.sort(function(a, b) {
-    const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+  sortByName.sort(function (a, b) {
+    const nameA = a.name.toUpperCase();
+    const nameB = b.name.toUpperCase();
     if (nameA > nameB) {
       return 1;
     }
     if (nameA < nameB) {
       return -1;
     }
-  
-    // names must be equal
+
     return 0;
   });
 
@@ -45,43 +43,57 @@ const ReposList = ({ sort, setSort }) => {
   sortByUpdatedDate.sort(function (a, b) {
     return new Date(a.created_at) - new Date(b.created_at);
   });
-  console.log(repos);
+
   useEffect(() => {
     axios.get("https://api.github.com/users/RishiRaj11/repos").then((data) => {
       //console.log(data.data);
       setRepos(data.data);
     });
   }, []);
-
+  //console.log(searchInput);
   return (
     <>
       <Container>
-        {sort ? <>
-         
-           {sort==="stars" && sortByStars.map((item) => (
-          <ReposCard item={item} key={item._id} />
-        ))} 
-        {sort==="watchers_count" && sortByWatchers.map((item) => (
-          <ReposCard item={item} key={item._id} />
-        ))}
-        {sort==="created_at" && sortByCreatedDate.map((item) => (
-          <ReposCard item={item} key={item._id} />
-        ))}
-        {sort==="updated_at" && sortByUpdatedDate.map((item) => (
-          <ReposCard item={item} key={item._id} />
-        ))}
-        {sort==="repo" && sortByName.map((item) => (
-          <ReposCard item={item} key={item._id} />
-        ))}
-        
-        </> : <>
-        
-        {repos.map((item) => (
-          <ReposCard item={item} key={item._id} />
-        ))}
-        </>
-        }
-        
+        {sort ? (
+          <>
+            {sort === "stars" &&
+              sortByStars.map((item) => (
+                <ReposCard item={item} key={item._id} />
+              ))}
+            {sort === "watchers_count" &&
+              sortByWatchers.map((item) => (
+                <ReposCard item={item} key={item._id} />
+              ))}
+            {sort === "created_at" &&
+              sortByCreatedDate.map((item) => (
+                <ReposCard item={item} key={item._id} />
+              ))}
+            {sort === "updated_at" &&
+              sortByUpdatedDate.map((item) => (
+                <ReposCard item={item} key={item._id} />
+              ))}
+            {sort === "repo" &&
+              sortByName.map((item) => (
+                <ReposCard item={item} key={item._id} />
+              ))}
+          </>
+        ) : (
+          <>
+            {repos
+              .filter((val) => {
+                if (searchInput === "") {
+                  return val;
+                } else if (
+                  val.name.toLowerCase().includes(searchInput.toLowerCase())
+                ) {
+                  return val;
+                }
+              })
+              .map((item) => (
+                <ReposCard item={item} key={item._id} />
+              ))}
+          </>
+        )}
       </Container>
     </>
   );

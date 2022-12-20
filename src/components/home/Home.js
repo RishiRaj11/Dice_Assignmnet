@@ -5,10 +5,10 @@ const Container=styled(Box)`
 margin-top:75px;
 `; 
 
-const Home = ({sort,setSort}) => {
+const Home = ({sort,setSort,searchInput}) => {
   return (
     <Container>
-        <ReposList sort={sort} setSort={setSort}  />
+        <ReposList sort={sort} setSort={setSort} searchInput={searchInput}  />
     </Container>
   )
 }

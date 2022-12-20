@@ -4,7 +4,7 @@ import CasinoIcon from '@mui/icons-material/Casino';
 import Search from "./Search";
 import Sort from './Sort';
 
-const Header = ({sort,setSort}) => {
+const Header = ({sort,setSort,searchFunction}) => {
  
   return (
     <AppBar style={{ backgroundColor: " rgb(29, 69, 107)" }}>
@@ -13,7 +13,7 @@ const Header = ({sort,setSort}) => {
           <CasinoIcon style={{ fontSize: "30px", textAlign: "center" , paddingTop:"5px" }} />
           <Box style={{ fontSize: "30px", textAlign: "center" }}>Dice</Box>
         </Box>
-        <Search  />
+        <Search searchFunction={searchFunction} />
         <Sort sort={sort} setSort={setSort}  style={{float:"right"}} />
       </Toolbar>
     </AppBar>
